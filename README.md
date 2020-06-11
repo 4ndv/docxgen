@@ -1,5 +1,7 @@
 # docxgen
 
+[![Build Status](https://travis-ci.org/4ndv/docxgen.svg?branch=master)](https://travis-ci.org/4ndv/docxgen)
+
 Docxgen is a Ruby library for templating docx files based on [ruby-docx](https://github.com/ruby-docx/docx).
 
 ## Features

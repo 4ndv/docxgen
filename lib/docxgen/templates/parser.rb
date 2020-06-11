@@ -15,7 +15,11 @@ module Docxgen
 
           {
             src: src,
-            path: path.split(".").reject(&:empty?)
+            path: path.split(".").reject(&:empty?).map do |p|
+              Integer(p) rescue next p.to_sym
+
+              p.to_i
+            end
           }
         end
       end

@@ -59,5 +59,11 @@ RSpec.describe Docxgen::Templates::Parser do
         expect(h[:path]).to be_an_instance_of(Array)
       end
     end
+
+    it "converts digits in path to integers, and strings to symbols" do
+      result = described_class.find_variables("{{ hello.0.1.2.3.world }}")
+
+      expect(result[0][:path]).to eq([:hello, 0, 1, 2, 3, :world])
+    end
   end
 end

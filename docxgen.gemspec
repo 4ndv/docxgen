@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.email         = ["andv@outlook.com"]
 
   spec.summary       = "docxgen allows generating docx files based on templates with variables"
-  spec.homepage      = "https://lynx.pink/docxgen"
+  spec.homepage      = "https://github.com/4ndv/docxgen"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/4ndv/docxgen"

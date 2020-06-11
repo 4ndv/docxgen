@@ -5,7 +5,7 @@ module Docxgen
     class Parser
       VARIABLE_REGEX = /({{[[:space:]]?(([[:alpha:]]|_)+([[:alnum:]]|_|\.)*(?<!\.))[[:space:]]?}})/
 
-      def self.tr_substitute!(tr, data, strict: true)
+      def self.tr_substitute!(tr, data, remove_missing: true)
         found_variables = self.find_variables(tr)
 
         errors = []
@@ -15,9 +15,9 @@ module Docxgen
 
           errors.push("No value provided for variable: #{var[:src]}") if value.nil?
 
-          next if value.nil? && strict # Don't replace variables with nil's in strict mode
+          next if value.nil? && !remove_missing # Don't replace variables with empty string if remove_missing is false
 
-          tr.substitute(var[:src], value)
+          tr.substitute(var[:src], value || "")
         end
 
         [tr, errors]

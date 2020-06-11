@@ -68,14 +68,14 @@ RSpec.describe Docxgen::Templates::Parser do
   end
 
   describe ".tr_substitute!" do
-    it "replaces variable in paragraph without errors in strict mode" do
+    it "replaces variable in paragraph without errors" do
       doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
 
       tr = doc.paragraphs.first.text_runs.first
 
       expect(tr.to_s).to eq("{{ paragraph }}")
 
-      _, errors = described_class.tr_substitute!(tr, { paragraph: "Hello, world!" }, strict: true)
+      _, errors = described_class.tr_substitute!(tr, { paragraph: "Hello, world!" })
 
       expect(errors.size).to eq(0)
 
@@ -91,6 +91,52 @@ RSpec.describe Docxgen::Templates::Parser do
       expect(tr.to_s).to eq("Hello, world!")
     end
 
+    it "replaces not-provided variable if remove_missing: true" do
+      doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      tr = doc.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("{{ paragraph }}")
+
+      _, errors = described_class.tr_substitute!(tr, { error: "Hello, world!" }, remove_missing: true)
+
+      expect(errors.size).to eq(1)
+
+      result_file = temp_docx_file("tr_substitute_replace")
+
+      doc.save(result_file)
+
+      result = Docx::Document.open(result_file)
+
+      # Must find it again, otherwise changes are not present
+      tr = result.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("")
+    end
+
+    it "does not replaces not-provided variable if remove_missing: false" do
+      doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      tr = doc.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("{{ paragraph }}")
+
+      _, errors = described_class.tr_substitute!(tr, { error: "Hello, world!" }, remove_missing: false)
+
+      expect(errors.size).to eq(1)
+
+      result_file = temp_docx_file("tr_substitute_replace")
+
+      doc.save(result_file)
+
+      result = Docx::Document.open(result_file)
+
+      # Must find it again, otherwise changes are not present
+      tr = result.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("{{ paragraph }}")
+    end
+
     it "returns error if data for variable wasn't provided" do
       doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
 
@@ -98,7 +144,7 @@ RSpec.describe Docxgen::Templates::Parser do
 
       expect(tr.to_s).to eq("{{ paragraph }}")
 
-      _, errors = described_class.tr_substitute!(tr, {}, strict: true)
+      _, errors = described_class.tr_substitute!(tr, {})
 
       expect(errors).to eq(["No value provided for variable: {{ paragraph }}"])
     end

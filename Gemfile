@@ -6,7 +6,6 @@ source "https://rubygems.org"
 gemspec
 
 gem "docx", "~> 0.5"
-gem "activesupport", "~> 6.0", ">= 6.0.3.1"
 
 group :development, :test do
   gem "rake", "~> 12.0"

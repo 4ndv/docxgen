@@ -11,3 +11,10 @@
 .rspec_status
 
 .DS_Store
+
+# Libreoffice
+.~lock*
+
+# Spec tmp
+/spec/tmp/*
+!/spec/tmp/.keep

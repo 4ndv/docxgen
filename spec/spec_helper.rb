@@ -2,6 +2,15 @@
 
 require "bundler/setup"
 require "docxgen"
+require "securerandom"
+
+RSPEC_ROOT = File.dirname __FILE__
+
+module SpecHelpers
+  def temp_docx_file(filename)
+    "#{RSPEC_ROOT}/tmp/#{filename}-#{SecureRandom.uuid}.docx"
+  end
+end
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -13,4 +22,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.include SpecHelpers
 end

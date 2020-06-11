@@ -66,4 +66,41 @@ RSpec.describe Docxgen::Templates::Parser do
       expect(result[0][:path]).to eq([:hello, 0, 1, 2, 3, :world])
     end
   end
+
+  describe ".tr_substitute!" do
+    it "replaces variable in paragraph without errors in strict mode" do
+      doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      tr = doc.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("{{ paragraph }}")
+
+      _, errors = described_class.tr_substitute!(tr, { paragraph: "Hello, world!" }, strict: true)
+
+      expect(errors.size).to eq(0)
+
+      result_file = temp_docx_file("tr_substitute_replace")
+
+      doc.save(result_file)
+
+      result = Docx::Document.open(result_file)
+
+      # Must find it again, otherwise changes are not present
+      tr = result.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("Hello, world!")
+    end
+
+    it "returns error if data for variable wasn't provided" do
+      doc = Docx::Document.open("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      tr = doc.paragraphs.first.text_runs.first
+
+      expect(tr.to_s).to eq("{{ paragraph }}")
+
+      _, errors = described_class.tr_substitute!(tr, {}, strict: true)
+
+      expect(errors).to eq(["No value provided for variable: {{ paragraph }}"])
+    end
+  end
 end

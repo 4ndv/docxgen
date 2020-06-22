@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    docxgen (0.1.0)
+    docxgen (0.1.1)
+      docx (~> 0.5)
 
 GEM
   remote: https://rubygems.org/
@@ -55,7 +56,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  docx (~> 0.5)
   docxgen!
   rake (~> 12.0)
   rspec (~> 3.0)

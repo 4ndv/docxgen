@@ -49,6 +49,12 @@ module Docxgen
       @doc.save(to)
     end
 
+    def stream
+      raise "Wasn't rendered" unless @rendered
+
+      @doc.stream
+    end
+
     private
 
       def collect_table_paragraphs

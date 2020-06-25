@@ -160,4 +160,20 @@ RSpec.describe Docxgen::Generator do
       expect { gen.save("123.docx") }.to raise_exception
     end
   end
+
+  describe ".stream" do
+    it "returns StringIO" do
+      gen = described_class.new("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      gen.render({})
+
+      expect(gen.stream).to be_kind_of(StringIO)
+    end
+
+    it "raises if wasn't rendered" do
+      gen = described_class.new("#{RSPEC_ROOT}/fixtures/single_paragraph.docx")
+
+      expect { gen.stream }.to raise_exception
+    end
+  end
 end

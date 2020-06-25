@@ -89,6 +89,12 @@ puts generator.errors # Returns array of the errors
 generator.save("result.docx")
 ```
 
+Alternatively you can use `stream` method if you want to get result as `StringIO` (for example, for saving it in ActiveStorage):
+
+```ruby
+io = generator.stream
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bundle exec rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
